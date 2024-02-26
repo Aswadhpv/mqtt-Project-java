@@ -1,0 +1,14 @@
+{
+  "mqtt": {
+    "broker_address": "<mqtt broker address>",
+    "topic_volume": "<mqtt topic for volume adjustment>",
+    "topic_message": "<mqtt topic for sending messages>"
+  },
+  "udp": {
+    "server_address": "<udp server address>",
+    "server_port": "<udp server port>"
+  },
+  "alsa": {
+    "device": "default"
+  }
+}
