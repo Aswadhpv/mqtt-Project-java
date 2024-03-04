@@ -13,10 +13,10 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
-public class project1 {
+public class Project1 {
 
     private static final String CONFIG_FILE = "config.json";
-    private static final Logger logger = Logger.getLogger(project1.class);
+    private static final Logger logger = Logger.getLogger(Project1.class);
 
     private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
@@ -48,20 +48,16 @@ public class project1 {
                 tryReconnect(mqttClient, config);
             }
 
-            @Override
-            public void messageArrived(String topic, MqttMessage message) throws Exception {
-                String payload = new String(message.getPayload(), "UTF-8");
+           @Override
+            public void messageArrived(String topic, MqttMessage message) {
+                String payload = new String(message.getPayload(), java.nio.charset.StandardCharsets.UTF_8);
                 if (topic.equals(config.getJSONObject("mqtt").getString("topic_volume"))) {
-                    executorService.execute(() -> {
-                        int volume = Integer.parseInt(payload);
-                        audioAdjuster.adjustVolume(volume);
-                    });
+                    adjustVolume(Integer.parseInt(payload), config);
                 } else if (topic.equals(config.getJSONObject("mqtt").getString("topic_message"))) {
-                    executorService.execute(() -> {
-                        messageSender.sendMessage(payload);
-                    });
+                    sendMessage(payload, config);
                 }
             }
+
 
             @Override
             public void deliveryComplete(IMqttDeliveryToken token) {
